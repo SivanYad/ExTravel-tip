@@ -2,6 +2,8 @@ export  const render ={renderLocs}
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
 
+var map = mapService.gMap
+
 window.onload = onInit;
 window.onAddMarker = onAddMarker;
 window.onPanTo = onPanTo;
@@ -9,10 +11,30 @@ window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
 
 
+function onGetClickedLoc() {
+    window.google.maps.event.addListener(gMap, 'click', (event) => {
+        console.log(event.latLng.lng())
+        var latLng = {
+          lat: event.latLng.lat(),
+          lng: event.latLng.lng(),
+        }
+        let infoWindow = new google.maps.InfoWindow({
+          content: `Your Position is ${JSON.stringify(latLng)}`,
+          position: latLng,
+        });
+        infoWindow.open(gMap);
+        var name = prompt('Please give a name to the selected location')
+        console.log(latLng)
+        locService.createLoc(name, latLng)
+      })
+}
+
+
 function onInit() {
     mapService.initMap()
         .then(() => {
             console.log('Map is ready');
+            onGetClickedLoc()
         })
         .catch(() => console.log('Error: cannot init map'));
 }
