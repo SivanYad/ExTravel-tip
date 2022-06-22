@@ -1,27 +1,38 @@
+import { render } from '../app.controller.js';
+import { storage } from './storage-service.js';
+import { makeId } from './utils.services.js';
+
 export const locService = {
     getLocs,
-    createLoc
+    createLoc,
+
 }
 
-
-import { MAPS_API_KEY } from './keys.service.js';
-import { makeId  } from './utils.services.js';
+const LOCS_KEY = 'locsDB'
 
 
-const gCachelocs = [
-    // { name: 'Greatplace', lat: 32.047104, lng: 34.832384 }, 
-    // { name: 'Neveragain', lat: 32.047201, lng: 34.832581 }
+
+const locs = [
+    { name: 'local', lat: 32.047104, lng: 34.832384 },
+    { name: 'Neveragain', lat: 32.047201, lng: 34.832581 }
 ]
 
 function getLocs() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            resolve(locs);
+            var locations = storage.loadFromStorage(LOCS_KEY)
+            console.log(locations);
+            if (locations || locations.length) {
+                resolve(locations);
+            } else resolve(locs)
+
+            // resolve(locs)
         }, 2000)
     });
 }
 
-function createLoc(name ,locLngLat) {
+function createLoc(name, locLngLat) {
+
     var loc = {
         id: makeId(),
         name,
@@ -31,8 +42,15 @@ function createLoc(name ,locLngLat) {
         createdAt: Date.now(),
         updatedAt: Date.now()
     }
-    console.log(loc)
-    return loc
+    locs.push(loc)
+    console.log(locs);
+    saveLocs()
+  
+    
+    // return loc
 }
 
-
+function saveLocs() {
+    console.log('saving');
+    storage.saveToStorage(LOCS_KEY, locs)
+}

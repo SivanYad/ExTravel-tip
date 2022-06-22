@@ -1,5 +1,7 @@
 import { MAPS_API_KEY } from './keys.service.js'
 import { locService } from './loc.service.js'
+import { render } from '../app.controller.js'
+import { storage } from './storage-service.js'
 
 export const mapService = {
   initMap,
@@ -12,27 +14,36 @@ var gMap
 function initMap(lat = 32.0749831, lng = 34.9120554) {
   console.log('InitMap')
   return _connectGoogleApi().then(() => {
+    // var  locations=storage.loadFromStorage(locService.LOCS_KEY)
     console.log('google available')
     gMap = new google.maps.Map(document.querySelector('#map'), {
       center: { lat, lng },
-      zoom: 15,
+      zoom: 18,
+      
+    })
+    var marker = new google.maps.Marker({
+      position:  { lat, lng },
+      map: gMap,
+
     })
     console.log('Map!', gMap)
     window.google.maps.event.addListener(gMap, 'click', (event) => {
       console.log(event.latLng.lng())
       var latLng = {
-          lat: event.latLng.lat(),
-          lng: event.latLng.lng(),
-        }
-        let infoWindow = new google.maps.InfoWindow({
-            content: `Your Position is ${JSON.stringify(latLng)}`,
-            position: latLng,
-          });
-          infoWindow.open(gMap);
-        var name = prompt('Please give a name to the selected location')
-        console.log(latLng)
-        locService.createLoc(name, latLng)
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      }
+      let infoWindow = new google.maps.InfoWindow({
+        content: `Your Position is ${JSON.stringify(latLng)}`,
+        position: latLng,
+      });
+      infoWindow.open(gMap);
+      var name = prompt('Please give a name to the selected location')
+      console.log(latLng)
+      locService.createLoc(name, latLng)
     })
+    
+   
   })
 }
 

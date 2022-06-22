@@ -1,3 +1,4 @@
+export  const render ={renderLocs}
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
 
@@ -12,7 +13,6 @@ function onInit() {
     mapService.initMap()
         .then(() => {
             console.log('Map is ready');
-            
         })
         .catch(() => console.log('Error: cannot init map'));
 }
@@ -43,9 +43,9 @@ function onGetLocs() {
 
 function onGetClickPos() {
     getPosition()
-    .then(pos => {
-        console.log('User position is:', pos.coords);
-    })
+        .then(pos => {
+            console.log('User position is:', pos.coords);
+        })
 }
 
 function onGetUserPos() {
@@ -54,6 +54,7 @@ function onGetUserPos() {
             console.log('User position is:', pos.coords);
             document.querySelector('.user-pos').innerText =
                 `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`
+            mapService.initMap(pos.coords.latitude, pos.coords.longitude)
         })
         .catch(err => {
             console.log('err!!!', err);
@@ -62,4 +63,29 @@ function onGetUserPos() {
 function onPanTo() {
     console.log('Panning the Map');
     mapService.panTo(35.6895, 139.6917);
+}
+
+
+function renderLocs() {
+    locService.getLocs().then(locs => {
+        console.log(locs);
+        var strHTML = locs.map(loc => {
+          return   `<tr>
+                <td> ${loc.name}</td>
+                <td> ${loc.lat}</td>
+                <td> ${loc.lng}</td>
+                <td><button onclick="initMap(${loc.lat,loc.lng})">Go</button>
+                <td><button onclick="deleteLoc(${loc.lat,loc.lng})">Delete</button>
+            
+            </tr>`
+        }).join('')
+
+
+        const elTbody = document.querySelector('tbody')
+        elTbody.innerHTML+=strHTML
+    })
+}
+
+function renderNewLoc(){
+    
 }
