@@ -13,7 +13,6 @@ const LOCS_KEY = 'locsDB'
 
 
 
-
 function getLocs() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {

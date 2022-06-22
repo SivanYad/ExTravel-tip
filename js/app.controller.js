@@ -1,4 +1,4 @@
-export  const render ={renderLocs}
+export const render = { renderLocs }
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
 
@@ -76,7 +76,7 @@ function renderLocs() {
     locService.getLocs().then(locs => {
         console.log(locs);
         var strHTML = locs.map(loc => {
-          return   `<tr>
+            return `<tr>
                 <td> ${loc.name}</td>
                 <td> ${loc.lat}</td>
                 <td> ${loc.lng}</td>

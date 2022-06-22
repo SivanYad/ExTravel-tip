@@ -13,7 +13,9 @@ var gMap
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
   console.log('InitMap')
+
   return _connectGoogleApi().then(() => {
+    render.renderLocs()
     // var  locations=storage.loadFromStorage(locService.LOCS_KEY)
     console.log('google available')
     gMap = new google.maps.Map(document.querySelector('#map'), {
