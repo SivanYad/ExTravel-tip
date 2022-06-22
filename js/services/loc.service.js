@@ -1,11 +1,16 @@
 export const locService = {
-    getLocs
+    getLocs,
+    createLoc
 }
 
 
-const locs = [
-    { name: 'Greatplace', lat: 32.047104, lng: 34.832384 }, 
-    { name: 'Neveragain', lat: 32.047201, lng: 34.832581 }
+import { MAPS_API_KEY } from './keys.service.js';
+import { makeId  } from './utils.services.js';
+
+
+const gCachelocs = [
+    // { name: 'Greatplace', lat: 32.047104, lng: 34.832384 }, 
+    // { name: 'Neveragain', lat: 32.047201, lng: 34.832581 }
 ]
 
 function getLocs() {
@@ -14,6 +19,20 @@ function getLocs() {
             resolve(locs);
         }, 2000)
     });
+}
+
+function createLoc(name ,locLngLat) {
+    var loc = {
+        id: makeId(),
+        name,
+        lat: locLngLat.lat,
+        lng: locLngLat.lng,
+        weather: null,
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+    }
+    console.log(loc)
+    return loc
 }
 
 

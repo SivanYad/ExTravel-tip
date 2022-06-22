@@ -7,13 +7,18 @@ window.onPanTo = onPanTo;
 window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
 
+
 function onInit() {
     mapService.initMap()
         .then(() => {
             console.log('Map is ready');
+            
         })
         .catch(() => console.log('Error: cannot init map'));
 }
+
+
+
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
 function getPosition() {
@@ -34,6 +39,13 @@ function onGetLocs() {
             console.log('Locations:', locs)
             document.querySelector('.locs').innerText = JSON.stringify(locs)
         })
+}
+
+function onGetClickPos() {
+    getPosition()
+    .then(pos => {
+        console.log('User position is:', pos.coords);
+    })
 }
 
 function onGetUserPos() {
