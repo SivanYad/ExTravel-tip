@@ -11,5 +11,12 @@ function saveToStorage(key, value) {
 
 function loadFromStorage(key) {
     var str = localStorage.getItem(key)
+    console.log(str);
+    console.log(key);
+
     return JSON.parse(str)
+}
+
+function clearStorage() {
+    localStorage.clear()
 }

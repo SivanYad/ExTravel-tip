@@ -2,39 +2,19 @@ export  const render ={renderLocs}
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
 
-var map = mapService.gMap
-
 window.onload = onInit;
 window.onAddMarker = onAddMarker;
 window.onPanTo = onPanTo;
 window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
+window.onGoToLoc = onGoToLoc;
 
-
-function onGetClickedLoc() {
-    window.google.maps.event.addListener(gMap, 'click', (event) => {
-        console.log(event.latLng.lng())
-        var latLng = {
-          lat: event.latLng.lat(),
-          lng: event.latLng.lng(),
-        }
-        let infoWindow = new google.maps.InfoWindow({
-          content: `Your Position is ${JSON.stringify(latLng)}`,
-          position: latLng,
-        });
-        infoWindow.open(gMap);
-        var name = prompt('Please give a name to the selected location')
-        console.log(latLng)
-        locService.createLoc(name, latLng)
-      })
-}
 
 
 function onInit() {
     mapService.initMap()
         .then(() => {
             console.log('Map is ready');
-            onGetClickedLoc()
         })
         .catch(() => console.log('Error: cannot init map'));
 }
@@ -87,6 +67,10 @@ function onPanTo() {
     mapService.panTo(35.6895, 139.6917);
 }
 
+function onGoToLoc(lat, lng){ 
+    console.log(1);
+}
+
 
 function renderLocs() {
     locService.getLocs().then(locs => {
@@ -96,7 +80,7 @@ function renderLocs() {
                 <td> ${loc.name}</td>
                 <td> ${loc.lat}</td>
                 <td> ${loc.lng}</td>
-                <td><button onclick="initMap(${loc.lat,loc.lng})">Go</button>
+                <td><button onclick="onGoToLoc(${loc.lat,loc.lng})">Go</button>
                 <td><button onclick="deleteLoc(${loc.lat,loc.lng})">Delete</button>
             
             </tr>`
@@ -104,10 +88,8 @@ function renderLocs() {
 
 
         const elTbody = document.querySelector('tbody')
-        elTbody.innerHTML+=strHTML
+        elTbody.innerHTML=strHTML
     })
 }
 
-function renderNewLoc(){
-    
-}
+
