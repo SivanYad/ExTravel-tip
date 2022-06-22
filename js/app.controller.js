@@ -8,6 +8,7 @@ window.onPanTo = onPanTo;
 window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
 window.onGoToLoc = onGoToLoc;
+window.onDeleteLoc = onDeleteLoc;
 
 
 
@@ -68,25 +69,35 @@ function onPanTo() {
 }
 
 function onGoToLoc(lat, lng){ 
-    console.log(1);
+    console.log(lng);
+    mapService.initMap(lat, lng).then(() => {
+        console.log('going to location', lat, lng);
+    })
+    .catch(() => console.log('Error: cannot init map'));
 }
 
+function onDeleteLoc(lat, lng) {
+    console.log('lat', lat, 'lng', lng)
+    locService.deleteLoc(lat, lng)
+    renderLocs()
+}
 
 function renderLocs() {
     locService.getLocs().then(locs => {
         console.log(locs);
         var strHTML = locs.map(loc => {
+            console.log('Our lng is ', loc.lng)
             return `<tr>
                 <td> ${loc.name}</td>
                 <td> ${loc.lat}</td>
                 <td> ${loc.lng}</td>
-                <td><button onclick="onGoToLoc(${loc.lat,loc.lng})">Go</button>
-                <td><button onclick="deleteLoc(${loc.lat,loc.lng})">Delete</button>
+                <td><button onclick="onGoToLoc(${loc.lat},${loc.lng})">Go</button>
+                <td><button onclick="onDeleteLoc(${loc.lat},${loc.lng})">Delete</button>
             
             </tr>`
         }).join('')
 
-
+        // console.log(strHTML)
         const elTbody = document.querySelector('tbody')
         elTbody.innerHTML=strHTML
     })

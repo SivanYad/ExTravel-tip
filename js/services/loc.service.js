@@ -6,11 +6,11 @@ import { makeId } from './utils.services.js';
 export const locService = {
     getLocs,
     createLoc,
+    deleteLoc
 
 }
 
 const LOCS_KEY = 'locsDB'
-
 
 
 function getLocs() {
@@ -59,4 +59,13 @@ function saveLocs(locs) {
 
 function onGoToLoc(lat, lng) {
     return mapService.initMap(lat, lng)
+}
+
+function deleteLoc(lat, lng) {
+    var locs = getLocs().then(locs => {
+        var locIdx = locs.findIndex((loc) => loc.lat === lat && loc.lng===lng)
+        console.log(locIdx);
+        locs.splice(locIdx, 1)
+        saveLocs(locs)
+    })
 }
