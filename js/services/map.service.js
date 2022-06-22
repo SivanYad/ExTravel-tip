@@ -1,7 +1,7 @@
+import { render } from '../app.controller.js'
 import { MAPS_API_KEY } from './keys.service.js'
 import { locService } from './loc.service.js'
-import { render } from '../app.controller.js'
-import { storage } from './storage-service.js'
+
 
 export const mapService = {
   initMap,
@@ -13,7 +13,9 @@ var gMap
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
   console.log('InitMap')
+
   return _connectGoogleApi().then(() => {
+    render.renderLocs()
     // var  locations=storage.loadFromStorage(locService.LOCS_KEY)
     console.log('google available')
     gMap = new google.maps.Map(document.querySelector('#map'), {
@@ -42,7 +44,7 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
       console.log(latLng)
       locService.createLoc(name, latLng)
     })
-    
+    render.renderLocs()
    
   })
 }
